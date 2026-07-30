@@ -1,0 +1,22 @@
+# Dépendances Node (énorme, se réinstalle avec npm install)
+node_modules/
+
+# Build du front (se régénère avec npm run build)
+dist/
+
+# --- Terraform : NE JAMAIS committer ---
+# Le state peut contenir des données sensibles
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+# Fichiers de variables potentiellement secrets
+*.tfvars
+
+# Secrets et environnement
+.env
+.env.*
+
+# Divers
+.DS_Store
+*.log
