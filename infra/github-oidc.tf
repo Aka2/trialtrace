@@ -23,7 +23,7 @@ resource "aws_iam_role" "github_deploy" {
         }
         # LE VERROU : uniquement depuis TON dépôt, branche main
         StringLike = {
-          "token.actions.githubusercontent.com:sub" = "repo:Aka2/trialtrace:ref:refs/heads/main"
+          "token.actions.githubusercontent.com:sub" = "repo:Aka2/trialtrace:*"
         }
       }
     }]
