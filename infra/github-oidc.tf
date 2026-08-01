@@ -23,7 +23,7 @@ resource "aws_iam_role" "github_deploy" {
         }
         # LE VERROU : uniquement depuis TON dépôt, branche main
         StringLike = {
-          "token.actions.githubusercontent.com:sub" = "repo:Aka2/trialtrace:*"
+          "token.actions.githubusercontent.com:sub" = "repo:Aka2*/trialtrace*:ref:refs/heads/main"
         }
       }
     }]
@@ -48,10 +48,10 @@ resource "aws_iam_role_policy" "github_deploy" {
         ]
       },
       {
-        # Rafraîchir le cache CloudFront après déploiement
+        # Lister et rafraîchir CloudFront après déploiement
         Effect   = "Allow"
-        Action   = "cloudfront:CreateInvalidation"
-        Resource = aws_cloudfront_distribution.frontend.arn
+        Action   = ["cloudfront:CreateInvalidation", "cloudfront:ListDistributions"]
+        Resource = "*"
       }
     ]
   })
