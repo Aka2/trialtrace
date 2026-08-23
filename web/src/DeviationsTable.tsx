@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { useAuth } from './auth/AuthContext'
 
 const API_URL = 'https://75n6uz51h9.execute-api.eu-west-1.amazonaws.com'
 
@@ -22,6 +23,8 @@ const TYPE_KEY: Record<string, string> = {
 
 export function DeviationsTable() {
   const { t } = useTranslation()
+  const { role } = useAuth()
+  const canAct = role === 'data-manager'
   const [filter, setFilter] = useState<Filter>('all')
   const [selected, setSelected] = useState<Deviation | null>(null)
 
@@ -122,14 +125,20 @@ export function DeviationsTable() {
               </div>
             </div>
 
-            <div className="drawer-actions">
-              <button className="drawer-btn primary" onClick={() => { alert(t('deviations.queryEmitted')); setSelected(null) }}>
-                {t('deviations.emitQueryBtn')}
-              </button>
-              <button className="drawer-btn" onClick={() => { alert(t('deviations.markedReviewed')); setSelected(null) }}>
-                {t('deviations.markReviewed')}
-              </button>
-            </div>
+            {canAct ? (
+              <div className="drawer-actions">
+                <button className="drawer-btn primary" onClick={() => { alert(t('deviations.queryEmitted')); setSelected(null) }}>
+                  {t('deviations.emitQueryBtn')}
+                </button>
+                <button className="drawer-btn" onClick={() => { alert(t('deviations.markedReviewed')); setSelected(null) }}>
+                  {t('deviations.markReviewed')}
+                </button>
+              </div>
+            ) : (
+              <div className="drawer-actions">
+                <p className="readonly-notice">{t('deviations.readonly')}</p>
+              </div>
+            )}
           </div>
         </>
       )}

@@ -15,7 +15,13 @@
     "subtitle": "Traitement anti-inflammatoire · 5 centres actifs · 30 participants inclus",
     "ask": "Interroger en langage naturel"
   },
-  "role": "Gestionnaire de données",
+  "role": {
+    "dataManager": "Gestionnaire de données",
+    "auditor": "Auditeur"
+  },
+  "auth": {
+    "logout": "Se déconnecter"
+  },
   "dashboard": {
     "title": "Tableau de bord",
     "reportsProcessed": "Rapports traités",
@@ -54,7 +60,8 @@
     "emitQueryBtn": "Émettre une query",
     "markReviewed": "Marquer comme examiné",
     "queryEmitted": "Query émise (démo)",
-    "markedReviewed": "Marqué comme examiné (démo)"
+    "markedReviewed": "Marqué comme examiné (démo)",
+    "readonly": "Lecture seule — un auditeur ne peut pas émettre de query."
   },
   "protocol": {
     "title": "Protocole de l'étude",
@@ -65,7 +72,8 @@
     "window": "Fenêtre de visite (± jours)",
     "save": "Enregistrer le protocole",
     "saving": "Enregistrement…",
-    "updated": "✓ Protocole mis à jour — les écarts vont se recalculer"
+    "updated": "✓ Protocole mis à jour — les écarts vont se recalculer",
+    "readonly": "Lecture seule — seul un gestionnaire de données peut modifier le protocole."
   },
   "import": {
     "title": "Importer un rapport",

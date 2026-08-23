@@ -15,7 +15,13 @@
     "subtitle": "Anti-inflammatory treatment · 5 active sites · 30 enrolled participants",
     "ask": "Ask in natural language"
   },
-  "role": "Data Manager",
+  "role": {
+    "dataManager": "Data Manager",
+    "auditor": "Auditor"
+  },
+  "auth": {
+    "logout": "Log out"
+  },
   "dashboard": {
     "title": "Dashboard",
     "reportsProcessed": "Reports processed",
@@ -54,7 +60,8 @@
     "emitQueryBtn": "Raise a query",
     "markReviewed": "Mark as reviewed",
     "queryEmitted": "Query raised (demo)",
-    "markedReviewed": "Marked as reviewed (demo)"
+    "markedReviewed": "Marked as reviewed (demo)",
+    "readonly": "Read-only — an auditor cannot raise a query."
   },
   "protocol": {
     "title": "Study protocol",
@@ -65,7 +72,8 @@
     "window": "Visit window (± days)",
     "save": "Save protocol",
     "saving": "Saving…",
-    "updated": "✓ Protocol updated — deviations will recalculate"
+    "updated": "✓ Protocol updated — deviations will recalculate",
+    "readonly": "Read-only — only a data manager can edit the protocol."
   },
   "import": {
     "title": "Import a report",

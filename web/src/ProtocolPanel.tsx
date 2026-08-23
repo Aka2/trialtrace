@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { useAuth } from './auth/AuthContext'
 
 const API_URL = 'https://75n6uz51h9.execute-api.eu-west-1.amazonaws.com'
 
@@ -8,6 +9,8 @@ type Protocol = { hemoglobinMin: number; hemoglobinMax: number; doseExpected: nu
 
 export function ProtocolPanel() {
   const { t } = useTranslation()
+  const { role } = useAuth()
+  const canEdit = role === 'data-manager'
   const [protocol, setProtocol] = useState<Protocol | null>(null)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
@@ -57,24 +60,28 @@ export function ProtocolPanel() {
       <div className="protocol-grid">
         <div className="protocol-field">
           <label>{t('protocol.hbMin')}</label>
-          <input type="number" step="0.1" value={protocol.hemoglobinMin} onChange={(e) => handleChange('hemoglobinMin', e.target.value)} />
+          <input type="number" step="0.1" value={protocol.hemoglobinMin} disabled={!canEdit} onChange={(e) => handleChange('hemoglobinMin', e.target.value)} />
         </div>
         <div className="protocol-field">
           <label>{t('protocol.hbMax')}</label>
-          <input type="number" step="0.1" value={protocol.hemoglobinMax} onChange={(e) => handleChange('hemoglobinMax', e.target.value)} />
+          <input type="number" step="0.1" value={protocol.hemoglobinMax} disabled={!canEdit} onChange={(e) => handleChange('hemoglobinMax', e.target.value)} />
         </div>
         <div className="protocol-field">
           <label>{t('protocol.dose')}</label>
-          <input type="number" value={protocol.doseExpected} onChange={(e) => handleChange('doseExpected', e.target.value)} />
+          <input type="number" value={protocol.doseExpected} disabled={!canEdit} onChange={(e) => handleChange('doseExpected', e.target.value)} />
         </div>
         <div className="protocol-field">
           <label>{t('protocol.window')}</label>
-          <input type="number" value={protocol.visitWindow} onChange={(e) => handleChange('visitWindow', e.target.value)} />
+          <input type="number" value={protocol.visitWindow} disabled={!canEdit} onChange={(e) => handleChange('visitWindow', e.target.value)} />
         </div>
       </div>
-      <button className="protocol-btn" onClick={handleSave} disabled={saving}>
-        {saving ? t('protocol.saving') : t('protocol.save')}
-      </button>
+      {canEdit ? (
+        <button className="protocol-btn" onClick={handleSave} disabled={saving}>
+          {saving ? t('protocol.saving') : t('protocol.save')}
+        </button>
+      ) : (
+        <p className="readonly-notice">{t('protocol.readonly')}</p>
+      )}
       {message && <p className="protocol-message">{message}</p>}
     </div>
   )

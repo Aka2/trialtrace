@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useAuth } from './auth/AuthContext'
 
 const Icon = ({ children }: { children: React.ReactNode }) => (
   <svg className="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{children}</svg>
@@ -7,6 +8,7 @@ const Icon = ({ children }: { children: React.ReactNode }) => (
 
 export function Sidebar() {
   const { t } = useTranslation()
+  const { email, role, logout } = useAuth()
 
   const suivi = [
     { to: '/', end: true, label: t('nav.dashboard'),
@@ -20,6 +22,10 @@ export function Sidebar() {
     { to: '/recherche', label: t('nav.search'),
       icon: <><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></> },
   ]
+
+  // Initiales à partir de l'email
+  const initials = email ? email.slice(0, 2).toUpperCase() : '??'
+  const roleLabel = role === 'auditor' ? t('role.auditor') : t('role.dataManager')
 
   return (
     <aside className="side">
@@ -49,8 +55,16 @@ export function Sidebar() {
       </nav>
 
       <div className="side-foot">
-        <div className="avatar">JO</div>
-        <div className="who"><b>Judith O.</b><span>{t('role')}</span></div>
+        <div className="avatar">{initials}</div>
+        <div className="who">
+          <b>{email}</b>
+          <span>{roleLabel}</span>
+        </div>
+        <button className="logout-btn" onClick={logout} title={t('auth.logout')}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>
+          </svg>
+        </button>
       </div>
     </aside>
   )
