@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "suivi": "Suivi",
+    "administration": "Administration",
+    "dashboard": "Tableau de bord",
+    "deviations": "Écarts détectés",
+    "reports": "Rapports reçus",
+    "protocol": "Protocole",
+    "search": "Recherche",
+    "audit": "Piste d'audit"
+  },
+  "topbar": {
+    "study": "Étude",
+    "phase": "Phase III",
+    "subtitle": "Traitement anti-inflammatoire · 5 centres actifs · 30 participants inclus",
+    "ask": "Interroger en langage naturel"
+  },
+  "role": "Gestionnaire de données",
+  "dashboard": {
+    "title": "Tableau de bord",
+    "reportsProcessed": "Rapports traités",
+    "visitsAnalyzed": "visites analysées",
+    "compliant": "Conformes",
+    "ofReports": "% des rapports",
+    "minorDeviations": "Déviations mineures",
+    "toReview": "à examiner",
+    "criticalDeviations": "Écarts critiques",
+    "actionRequired": "action requise"
+  },
+  "deviations": {
+    "title": "Écarts détectés",
+    "resultsSorted": "{{count}} résultats · triés par criticité",
+    "all": "Tous",
+    "critical": "Critiques",
+    "minor": "Mineures",
+    "participant": "Participant",
+    "rule": "Règle du protocole",
+    "status": "Statut",
+    "action": "Action",
+    "visit": "Visite {{n}}",
+    "criticalTag": "Critique",
+    "minorTag": "Mineure",
+    "emitQuery": "Émettre une query →",
+    "examine": "Examiner →",
+    "typeHemoglobin": "Valeur biologique hors bornes",
+    "typeVisit": "Visite hors fenêtre",
+    "typeDose": "Dose non conforme",
+    "loading": "Analyse en cours…",
+    "loadError": "Erreur de chargement",
+    "detailTitle": "Détail de l'écart",
+    "visitLabel": "Visite",
+    "detailLabel": "Détail",
+    "severityLabel": "Criticité",
+    "emitQueryBtn": "Émettre une query",
+    "markReviewed": "Marquer comme examiné",
+    "queryEmitted": "Query émise (démo)",
+    "markedReviewed": "Marqué comme examiné (démo)"
+  },
+  "protocol": {
+    "title": "Protocole de l'étude",
+    "hint": "Modifier une règle recalcule automatiquement les écarts détectés.",
+    "hbMin": "Hémoglobine min (g/dL)",
+    "hbMax": "Hémoglobine max (g/dL)",
+    "dose": "Dose attendue (mg)",
+    "window": "Fenêtre de visite (± jours)",
+    "save": "Enregistrer le protocole",
+    "saving": "Enregistrement…",
+    "updated": "✓ Protocole mis à jour — les écarts vont se recalculer"
+  },
+  "import": {
+    "title": "Importer un rapport",
+    "hint": "Collez le texte d'un compte-rendu de visite, l'IA en extrait les données.",
+    "placeholder": "Ex : Patient SITE02-0007, centre de Lyon. Visite du 12 avril 2026. Hémoglobine 7,1 g/dL. Dose 50 mg.",
+    "extract": "Extraire les données",
+    "extracting": "Extraction en cours…",
+    "validated": "✓ Données extraites et validées",
+    "invalid": "✗ Données extraites invalides"
+  },
+  "search": {
+    "title": "Rechercher un participant",
+    "placeholder": "Centre, identifiant, statut… (ex : Lyon, SITE01, active)",
+    "button": "Rechercher",
+    "results": "{{count}} résultat(s)"
+  },
+  "ask": {
+    "title": "Interroger en langage naturel",
+    "hint": "Posez une question sur les données de l'étude, en français.",
+    "placeholder": "Ex : Combien d'écarts critiques au centre de Lyon ?",
+    "send": "Demander",
+    "operation": "Opération utilisée : {{tool}}",
+    "suggestion1": "Combien d'écarts critiques au total ?",
+    "suggestion2": "Combien de participants au centre de Lyon ?",
+    "suggestion3": "Donne-moi les statistiques globales"
+  }
+}

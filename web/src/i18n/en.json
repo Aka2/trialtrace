@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "suivi": "Monitoring",
+    "administration": "Administration",
+    "dashboard": "Dashboard",
+    "deviations": "Detected deviations",
+    "reports": "Received reports",
+    "protocol": "Protocol",
+    "search": "Search",
+    "audit": "Audit trail"
+  },
+  "topbar": {
+    "study": "Study",
+    "phase": "Phase III",
+    "subtitle": "Anti-inflammatory treatment · 5 active sites · 30 enrolled participants",
+    "ask": "Ask in natural language"
+  },
+  "role": "Data Manager",
+  "dashboard": {
+    "title": "Dashboard",
+    "reportsProcessed": "Reports processed",
+    "visitsAnalyzed": "visits analyzed",
+    "compliant": "Compliant",
+    "ofReports": "% of reports",
+    "minorDeviations": "Minor deviations",
+    "toReview": "to review",
+    "criticalDeviations": "Critical deviations",
+    "actionRequired": "action required"
+  },
+  "deviations": {
+    "title": "Detected deviations",
+    "resultsSorted": "{{count}} results · sorted by severity",
+    "all": "All",
+    "critical": "Critical",
+    "minor": "Minor",
+    "participant": "Participant",
+    "rule": "Protocol rule",
+    "status": "Status",
+    "action": "Action",
+    "visit": "Visit {{n}}",
+    "criticalTag": "Critical",
+    "minorTag": "Minor",
+    "emitQuery": "Raise a query →",
+    "examine": "Review →",
+    "typeHemoglobin": "Biological value out of range",
+    "typeVisit": "Visit out of window",
+    "typeDose": "Non-compliant dose",
+    "loading": "Analyzing…",
+    "loadError": "Loading error",
+    "detailTitle": "Deviation detail",
+    "visitLabel": "Visit",
+    "detailLabel": "Detail",
+    "severityLabel": "Severity",
+    "emitQueryBtn": "Raise a query",
+    "markReviewed": "Mark as reviewed",
+    "queryEmitted": "Query raised (demo)",
+    "markedReviewed": "Marked as reviewed (demo)"
+  },
+  "protocol": {
+    "title": "Study protocol",
+    "hint": "Editing a rule automatically recalculates detected deviations.",
+    "hbMin": "Hemoglobin min (g/dL)",
+    "hbMax": "Hemoglobin max (g/dL)",
+    "dose": "Expected dose (mg)",
+    "window": "Visit window (± days)",
+    "save": "Save protocol",
+    "saving": "Saving…",
+    "updated": "✓ Protocol updated — deviations will recalculate"
+  },
+  "import": {
+    "title": "Import a report",
+    "hint": "Paste a visit report text, the AI extracts the data.",
+    "placeholder": "E.g.: Patient SITE02-0007, Lyon site. Visit on April 12, 2026. Hemoglobin 7.1 g/dL. Dose 50 mg.",
+    "extract": "Extract data",
+    "extracting": "Extracting…",
+    "validated": "✓ Data extracted and validated",
+    "invalid": "✗ Invalid extracted data"
+  },
+  "search": {
+    "title": "Search a participant",
+    "placeholder": "Site, ID, status… (e.g.: Lyon, SITE01, active)",
+    "button": "Search",
+    "results": "{{count}} result(s)"
+  },
+  "ask": {
+    "title": "Ask in natural language",
+    "hint": "Ask a question about the study data.",
+    "placeholder": "E.g.: How many critical deviations at the Lyon site?",
+    "send": "Ask",
+    "operation": "Operation used: {{tool}}",
+    "suggestion1": "How many critical deviations in total?",
+    "suggestion2": "How many participants at the Lyon site?",
+    "suggestion3": "Give me the overall statistics"
+  }
+}

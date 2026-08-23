@@ -1,0 +1,81 @@
+import { useState, useEffect } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
+
+const API_URL = 'https://75n6uz51h9.execute-api.eu-west-1.amazonaws.com'
+
+type Protocol = { hemoglobinMin: number; hemoglobinMax: number; doseExpected: number; visitWindow: number }
+
+export function ProtocolPanel() {
+  const { t } = useTranslation()
+  const [protocol, setProtocol] = useState<Protocol | null>(null)
+  const [saving, setSaving] = useState(false)
+  const [message, setMessage] = useState('')
+  const queryClient = useQueryClient()
+
+  useEffect(() => {
+    fetch(`${API_URL}/protocol`).then((r) => r.json()).then(setProtocol).catch(() => setMessage(t('deviations.loadError')))
+  }, [t])
+
+  const handleChange = (field: keyof Protocol, value: string) => {
+    if (!protocol) return
+    setProtocol({ ...protocol, [field]: Number(value) })
+  }
+
+  const handleSave = async () => {
+    if (!protocol) return
+    setSaving(true)
+    setMessage('')
+    try {
+      const res = await fetch(`${API_URL}/protocol`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(protocol),
+      })
+      if (!res.ok) {
+        const err = await res.json()
+        setMessage(err.error ?? 'Error')
+      } else {
+        setMessage(t('protocol.updated'))
+        queryClient.invalidateQueries({ queryKey: ['deviations'] })
+        queryClient.invalidateQueries({ queryKey: ['stats'] })
+      }
+    } catch {
+      setMessage(t('deviations.loadError'))
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (!protocol) {
+    return <div className="protocol-panel"><p className="muted">{message || t('deviations.loading')}</p></div>
+  }
+
+  return (
+    <div className="protocol-panel">
+      <p className="hint">{t('protocol.hint')}</p>
+      <div className="protocol-grid">
+        <div className="protocol-field">
+          <label>{t('protocol.hbMin')}</label>
+          <input type="number" step="0.1" value={protocol.hemoglobinMin} onChange={(e) => handleChange('hemoglobinMin', e.target.value)} />
+        </div>
+        <div className="protocol-field">
+          <label>{t('protocol.hbMax')}</label>
+          <input type="number" step="0.1" value={protocol.hemoglobinMax} onChange={(e) => handleChange('hemoglobinMax', e.target.value)} />
+        </div>
+        <div className="protocol-field">
+          <label>{t('protocol.dose')}</label>
+          <input type="number" value={protocol.doseExpected} onChange={(e) => handleChange('doseExpected', e.target.value)} />
+        </div>
+        <div className="protocol-field">
+          <label>{t('protocol.window')}</label>
+          <input type="number" value={protocol.visitWindow} onChange={(e) => handleChange('visitWindow', e.target.value)} />
+        </div>
+      </div>
+      <button className="protocol-btn" onClick={handleSave} disabled={saving}>
+        {saving ? t('protocol.saving') : t('protocol.save')}
+      </button>
+      {message && <p className="protocol-message">{message}</p>}
+    </div>
+  )
+}
