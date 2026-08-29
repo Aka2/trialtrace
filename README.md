@@ -1,6 +1,6 @@
 # TrialTrace
 
-🇫🇷 [Lire en français](README_fr.md) · 📓 [Detailed project
+🇫🇷 [Lire en français](README.fr.md) · 📓 [Detailed project
 journal](JOURNAL.md)
 
 **Cloud-native clinical data review and protocol-compliance platform**
@@ -12,6 +12,10 @@ a controlled AI extraction pipeline for unstructured clinical reports.
 
 > **Data policy:** all data used in TrialTrace is synthetic. No real
 > patient data is used.
+
+## Dashboard preview
+
+![TrialTrace dashboard](docs/dashboard.png)
 
 ## The problem
 
@@ -49,7 +53,7 @@ TrialTrace explores a workflow where teams can:
                  │                               Auth / RBAC
         ┌────────┼─────────┐
         │        │         │
-    DynamoDB  Bedrock   OpenSearch*
+    DynamoDB  Bedrock   OpenSearch
 ```
 
 `*` OpenSearch and several later product capabilities are implemented in
@@ -165,28 +169,28 @@ the application's behavior can be tested against expected results.
 
 ## Tech stack
 
-  -----------------------------------------------------------------------
-  Area                                Technologies
-  ----------------------------------- -----------------------------------
-  Frontend                            React, TypeScript, Vite, TanStack
-                                      Query
+  ---------------------------------------------------------------------
+  Area                               Technologies
+  ---------------------------------- ----------------------------------
+  Frontend                           React, TypeScript, Vite, TanStack
+                                     Query
 
-  Cloud                               AWS Lambda, API Gateway, S3,
-                                      CloudFront, DynamoDB, Cognito,
-                                      Bedrock
+  Cloud                              AWS Lambda, API Gateway, S3,
+                                     CloudFront, DynamoDB, Cognito,
+                                     Bedrock
 
-  Search                              OpenSearch
+  Search                             OpenSearch
 
-  IaC                                 Terraform
+  IaC                                Terraform
 
-  CI/CD                               GitHub Actions
+  CI/CD                              GitHub Actions
 
-  Authentication                      Cognito, JWT, OIDC
+  Authentication                     Cognito, JWT, OIDC
 
-  Runtime                             Node.js
+  Runtime                            Node.js
 
-  Source control                      Git / GitHub
-  -----------------------------------------------------------------------
+  Source control                     Git / GitHub
+  ---------------------------------------------------------------------
 
 ## Repository structure
 
@@ -246,6 +250,299 @@ require deliberate lifecycle/cost management.
     server-side.
 -   LLM output must be treated as untrusted input and validated
     deterministically.
+
+------------------------------------------------------------------------
+
+## Practical commands
+
+### Local React development
+
+``` powershell
+cd web
+npm install
+npm run dev
+```
+
+Production build:
+
+``` powershell
+npm run build
+```
+
+Vite generates the deployable files in `web/dist/`.
+
+### AWS CLI checks
+
+``` powershell
+aws --version
+aws sts get-caller-identity
+```
+
+`get-caller-identity` is an important safety check: it confirms which
+AWS identity the terminal is currently using.
+
+### Terraform workflow
+
+``` powershell
+cd infra
+terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform apply
+```
+
+Always review `terraform plan` before confirming an apply.
+
+After a change:
+
+``` powershell
+terraform plan
+```
+
+A stable environment should report `No changes`.
+
+Useful outputs:
+
+``` powershell
+terraform output
+terraform output -raw site_url
+terraform output -raw api_url
+```
+
+The project uses remote Terraform state in S3. Never commit `.tfstate`
+files and do not casually delete the backend bucket.
+
+### Lambda and API changes
+
+Lambda packaging/deployment is managed by Terraform:
+
+``` powershell
+cd infra
+terraform plan
+terraform apply
+terraform output -raw api_url
+```
+
+### Manual frontend deployment
+
+GitHub Actions normally performs deployment automatically, but the
+manual workflow is useful to understand and troubleshoot:
+
+``` powershell
+cd web
+npm run build
+aws s3 sync dist/ s3://<frontend-bucket> --delete
+```
+
+The S3 frontend bucket remains private; CloudFront reads it through OAC.
+
+Refresh the CDN cache:
+
+``` powershell
+aws cloudfront create-invalidation --distribution-id <distribution-id> --paths "/*"
+```
+
+### Git workflow
+
+Before committing:
+
+``` powershell
+git status
+git diff
+```
+
+Commit and push:
+
+``` powershell
+git add .
+git commit -m "describe the change"
+git push
+```
+
+Before an important push, review the staged content:
+
+``` powershell
+git diff --cached
+```
+
+Typical `.gitignore` protections:
+
+``` gitignore
+node_modules/
+dist/
+.terraform/
+*.tfstate
+*.tfstate.*
+.env
+.env.*
+```
+
+### GitHub Actions / CI-CD
+
+A push to `main` triggers the deployment workflow:
+
+``` powershell
+git push origin main
+```
+
+Pipeline:
+
+``` text
+checkout
+→ npm ci
+→ npm run build
+→ temporary AWS credentials through OIDC
+→ S3 sync
+→ CloudFront invalidation
+```
+
+The GitHub repository secret contains the deployment **role ARN**, not
+AWS access keys:
+
+``` text
+AWS_DEPLOY_ROLE_ARN
+```
+
+If OIDC fails with `sts:AssumeRoleWithWebIdentity`, check:
+
+1.  `permissions: id-token: write`;
+2.  the role ARN;
+3.  the AWS OIDC provider;
+4.  the trust-policy conditions;
+5.  the actual GitHub token claims;
+6.  repository and branch restrictions.
+
+Remember:
+
+``` text
+Trust policy       → who may assume the role?
+Permission policy  → what may the assumed role do?
+```
+
+### DynamoDB / dashboard regression check
+
+After backend changes:
+
+``` powershell
+terraform plan
+terraform apply
+```
+
+The reference synthetic dataset used during development is
+approximately:
+
+``` text
+90 reports/visits
+76 compliant
+10 minor deviations
+4 critical deviations
+14 total deviations
+```
+
+Known expected values make useful regression checks.
+
+### Bedrock extraction verification
+
+Conceptual request:
+
+``` json
+{
+  "text": "Synthetic clinical report..."
+}
+```
+
+Expected valid path:
+
+``` text
+POST /extract
+→ Bedrock
+→ output cleanup
+→ JSON parsing
+→ deterministic validation
+→ HTTP 200
+```
+
+Expected invalid path:
+
+``` text
+POST /extract
+→ Bedrock
+→ deterministic validation fails
+→ HTTP 422
+```
+
+An intentionally impossible hemoglobin value is used as a negative test
+to prove that LLM output is never accepted blindly.
+
+### Cognito / RBAC verification
+
+Test both roles:
+
+``` text
+data-manager → write-capable experience
+auditor      → read-only experience
+```
+
+Demo passwords must never be committed.
+
+UI RBAC is not the final security boundary. Protected API operations
+must ultimately validate the Cognito JWT and role server-side.
+
+### Cost-aware infrastructure work
+
+Before any infrastructure change:
+
+``` powershell
+terraform plan
+```
+
+OpenSearch is materially different from the early serverless resources
+because a provisioned domain can incur hourly cost.
+
+For exceptional lifecycle troubleshooting, inspect a targeted plan
+first:
+
+``` powershell
+terraform plan -target="aws_opensearch_domain.trialtrace"
+```
+
+Targeted Terraform operations should not become the normal deployment
+workflow.
+
+### Useful diagnostics
+
+``` powershell
+git status
+node --version
+npm --version
+aws --version
+aws sts get-caller-identity
+terraform version
+terraform fmt -check
+terraform validate
+terraform plan
+terraform output
+```
+
+## Public-repository safety checklist
+
+Before every public push, verify that the repository contains no:
+
+-   AWS Access Key ID;
+-   AWS Secret Access Key;
+-   GitHub Personal Access Token;
+-   Cognito/demo passwords;
+-   private keys;
+-   secret-bearing `.env` files;
+-   Terraform state;
+-   real patient or clinical data.
+
+Public identifiers such as API URLs, bucket names and ARNs are not
+passwords, but placeholders are preferred in documentation when exact
+values are unnecessary.
+
+------------------------------------------------------------------------
 
 ## Documentation
 
