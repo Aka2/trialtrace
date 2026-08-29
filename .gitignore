@@ -23,4 +23,3 @@ dist/
 
 # Paquets Lambda générés par Terraform
 *.zip
-JOURNAL.md
