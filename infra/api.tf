@@ -2,8 +2,13 @@
 resource "aws_apigatewayv2_api" "http_api" {
   name          = "trialtrace-api"
   protocol_type = "HTTP"
-}
 
+  cors_configuration {
+    allow_origins = ["*"]
+    allow_methods = ["GET", "POST",  "PUT", "OPTIONS"]
+    allow_headers = ["*"]
+  }
+}
 # --- 2. Le stage : le "déploiement" qui rend l'API accessible ---
 resource "aws_apigatewayv2_stage" "default" {
   api_id      = aws_apigatewayv2_api.http_api.id
