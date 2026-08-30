@@ -10,6 +10,7 @@ import { ProtocolPage } from './pages/ProtocolPage'
 import { AskPage } from './pages/AskPage'
 import './App.css'
 import { useIdleTimeout } from './auth/useIdleTimeout'
+import { AuditPage } from './pages/AuditPage'
 
 function AppShell() {
   const { isAuthenticated, loading, logout } = useAuth()
@@ -39,7 +40,7 @@ function AppShell() {
               <Route path="/recherche" element={<SearchPage />} />
               <Route path="/protocole" element={<ProtocolPage />} />
               <Route path="/interroger" element={<AskPage />} />
-              <Route path="/audit" element={<div><h1 className="page-title">Piste d'audit</h1><p className="muted">À venir.</p></div>} />
+              <Route path="/audit" element={<AuditPage />} />
             </Routes>
           </div>
         </div>

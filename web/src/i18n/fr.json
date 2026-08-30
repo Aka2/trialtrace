@@ -61,7 +61,34 @@
     "markReviewed": "Marquer comme examiné",
     "queryEmitted": "Query émise (démo)",
     "markedReviewed": "Marqué comme examiné (démo)",
-    "readonly": "Lecture seule — un auditeur ne peut pas émettre de query."
+    "readonly": "Lecture seule — un auditeur ne peut pas émettre de query.",
+    "showing": "{{shown}} sur {{total}} affichés",
+    "showMore": "Voir plus"
+  },
+  "audit": {
+    "title": "Journal des actions",
+    "subtitle": "{{count}} entrées · les plus récentes en premier",
+    "empty": "Aucune action enregistrée pour l'instant.",
+    "when": "Date et heure",
+    "who": "Utilisateur",
+    "what": "Action",
+    "on": "Objet",
+    "allActions": "Toutes",
+    "protocolFilter": "Protocole",
+    "queryFilter": "Queries",
+    "allUsers": "Tous les utilisateurs"
+  },
+  "subject": {
+    "title": "Détail du participant",
+    "site": "Centre",
+    "status": "Statut",
+    "inclusionDate": "Date d'inclusion",
+    "visits": "Visites",
+    "visit": "Visite",
+    "hemoglobin": "Hémoglobine",
+    "dose": "Dose",
+    "day": "Jour (réel / prévu)",
+    "notFound": "Participant introuvable."
   },
   "protocol": {
     "title": "Protocole de l'étude",

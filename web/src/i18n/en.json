@@ -61,7 +61,9 @@
     "markReviewed": "Mark as reviewed",
     "queryEmitted": "Query raised (demo)",
     "markedReviewed": "Marked as reviewed (demo)",
-    "readonly": "Read-only — an auditor cannot raise a query."
+    "readonly": "Read-only — an auditor cannot raise a query.",
+    "showing": "Showing {{shown}} of {{total}}",
+    "showMore": "Show more"
   },
   "protocol": {
     "title": "Study protocol",
@@ -74,6 +76,31 @@
     "saving": "Saving…",
     "updated": "✓ Protocol updated — deviations will recalculate",
     "readonly": "Read-only — only a data manager can edit the protocol."
+  },
+  "audit": {
+    "title": "Action log",
+    "subtitle": "{{count}} entries · most recent first",
+    "empty": "No action recorded yet.",
+    "when": "Date & time",
+    "who": "User",
+    "what": "Action",
+    "on": "Target",
+    "allActions": "All",
+    "protocolFilter": "Protocol",
+    "queryFilter": "Queries",
+    "allUsers": "All users"
+  },
+  "subject": {
+    "title": "Participant detail",
+    "site": "Site",
+    "status": "Status",
+    "inclusionDate": "Inclusion date",
+    "visits": "Visits",
+    "visit": "Visit",
+    "hemoglobin": "Hemoglobin",
+    "dose": "Dose",
+    "day": "Day (actual / planned)",
+    "notFound": "Participant not found."
   },
   "import": {
     "title": "Import a report",

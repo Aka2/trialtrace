@@ -20,12 +20,15 @@ const TYPE_KEY: Record<string, string> = {
   DOSE_MISMATCH: 'deviations.typeDose',
 }
 
+const PAGE_SIZE = 10
+
 export function DeviationsTable() {
   const { t } = useTranslation()
   const { role } = useAuth()
   const canAct = role === 'data-manager'
   const [filter, setFilter] = useState<Filter>('all')
   const [selected, setSelected] = useState<Deviation | null>(null)
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
 
   const { data, isLoading, error } = useQuery<{ count: number; deviations: Deviation[] }>({
     queryKey: ['deviations'],
@@ -41,15 +44,23 @@ export function DeviationsTable() {
     return d.severity === filter
   }) ?? []
 
+  const visible = filtered.slice(0, visibleCount)
+  const hasMore = visibleCount < filtered.length
+
+  const changeFilter = (f: Filter) => {
+    setFilter(f)
+    setVisibleCount(PAGE_SIZE)
+  }
+
   return (
     <div className="deviations-panel">
       <div className="deviations-head">
         <h2>{t('deviations.title')}</h2>
         <span className="deviations-count">{t('deviations.resultsSorted', { count: filtered.length })}</span>
         <div className="deviations-filters">
-          <button className={filter === 'all' ? 'chip on' : 'chip'} onClick={() => setFilter('all')}>{t('deviations.all')}</button>
-          <button className={filter === 'critical' ? 'chip on' : 'chip'} onClick={() => setFilter('critical')}>{t('deviations.critical')}</button>
-          <button className={filter === 'minor' ? 'chip on' : 'chip'} onClick={() => setFilter('minor')}>{t('deviations.minor')}</button>
+          <button className={filter === 'all' ? 'chip on' : 'chip'} onClick={() => changeFilter('all')}>{t('deviations.all')}</button>
+          <button className={filter === 'critical' ? 'chip on' : 'chip'} onClick={() => changeFilter('critical')}>{t('deviations.critical')}</button>
+          <button className={filter === 'minor' ? 'chip on' : 'chip'} onClick={() => changeFilter('minor')}>{t('deviations.minor')}</button>
         </div>
       </div>
 
@@ -67,7 +78,7 @@ export function DeviationsTable() {
             </tr>
           </thead>
           <tbody>
-            {filtered.map((d, i) => (
+            {visible.map((d, i) => (
               <tr key={i}>
                 <td className="dev-subject">{d.subjectId}<span className="dev-visit">{t('deviations.visit', { n: d.visitNumber })}</span></td>
                 <td className="dev-rule">
@@ -88,6 +99,19 @@ export function DeviationsTable() {
             ))}
           </tbody>
         </table>
+      )}
+
+      {data && filtered.length > 0 && (
+        <div className="pagination">
+          <span className="pagination-count">
+            {t('deviations.showing', { shown: visible.length, total: filtered.length })}
+          </span>
+          {hasMore && (
+            <button className="pagination-btn" onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}>
+              {t('deviations.showMore')}
+            </button>
+          )}
+        </div>
       )}
 
       {selected && (
@@ -126,7 +150,19 @@ export function DeviationsTable() {
 
             {canAct ? (
               <div className="drawer-actions">
-                <button className="drawer-btn primary" onClick={() => { alert(t('deviations.queryEmitted')); setSelected(null) }}>
+                <button className="drawer-btn primary" onClick={async () => {
+                  await apiFetch('/query', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      subjectId: selected.subjectId,
+                      visitNumber: selected.visitNumber,
+                      deviationType: selected.type,
+                    }),
+                  })
+                  alert(t('deviations.queryEmitted'))
+                  setSelected(null)
+                }}>
                   {t('deviations.emitQueryBtn')}
                 </button>
                 <button className="drawer-btn" onClick={() => { alert(t('deviations.markedReviewed')); setSelected(null) }}>

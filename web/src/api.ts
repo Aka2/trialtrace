@@ -5,7 +5,7 @@ const API_URL = 'https://75n6uz51h9.execute-api.eu-west-1.amazonaws.com'
 async function getToken(): Promise<string | null> {
   try {
     const session = await fetchAuthSession()
-    return session.tokens?.accessToken?.toString() ?? null
+    return session.tokens?.idToken?.toString() ?? null
   } catch {
     return null
   }

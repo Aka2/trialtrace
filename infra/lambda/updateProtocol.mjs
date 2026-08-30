@@ -1,21 +1,13 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
+import { getIdentity, writeAudit } from "./audit.mjs";
 
 const doc = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
-// Extrait les groupes (rôles) depuis le JWT transmis par l'authorizer
-function getGroups(event) {
-  const claims = event.requestContext?.authorizer?.jwt?.claims ?? {};
-  const raw = claims["cognito:groups"];
-  if (!raw) return [];
-  // Selon le format, ça peut être un tableau ou une chaîne "[data-manager]"
-  if (Array.isArray(raw)) return raw;
-  return String(raw).replace(/[[\]]/g, "").split(/[\s,]+/).filter(Boolean);
-}
-
 export const handler = async (event) => {
-  // --- Contrôle du rôle : seul un data-manager peut modifier ---
-  const groups = getGroups(event);
+  const { email, groups } = getIdentity(event);
+
+  // Contrôle du rôle : seul un data-manager peut modifier
   if (!groups.includes("data-manager")) {
     return {
       statusCode: 403,
@@ -47,6 +39,14 @@ export const handler = async (event) => {
       visitWindow: body.visitWindow,
     },
   }));
+
+  // --- Traçage de l'action ---
+  await writeAudit({
+    actor: email,
+    action: "PROTOCOL_UPDATED",
+    target: "Protocole de l'étude",
+    details: `HB ${body.hemoglobinMin}-${body.hemoglobinMax}, dose ${body.doseExpected}, fenêtre ±${body.visitWindow}j`,
+  });
 
   return {
     statusCode: 200,
