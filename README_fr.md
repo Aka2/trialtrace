@@ -10,7 +10,7 @@ TrialTrace est un projet portfolio qui explore comment combiner cloud, IA et rè
 
 ## Aperçu du dashboard
 
-![Dashboard TrialTrace](docs/dashboard.png)
+![Dashboard TrialTrace](docs/Dashboard.png)
 
 ## Le problème
 

@@ -10,7 +10,7 @@ TrialTrace is a portfolio project exploring how modern cloud, AI and determinist
 
 ## Dashboard preview
 
-![TrialTrace dashboard](docs/dashboard.png)
+![TrialTrace dashboard](docs/Dashboard.png)
 
 ## The problem
 
