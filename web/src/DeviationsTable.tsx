@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from './auth/AuthContext'
-
-const API_URL = 'https://75n6uz51h9.execute-api.eu-west-1.amazonaws.com'
+import { apiFetch } from './api'
 
 type Deviation = {
   subjectId: string
@@ -31,7 +30,7 @@ export function DeviationsTable() {
   const { data, isLoading, error } = useQuery<{ count: number; deviations: Deviation[] }>({
     queryKey: ['deviations'],
     queryFn: async () => {
-      const res = await fetch(`${API_URL}/deviations`)
+      const res = await apiFetch('/deviations')
       if (!res.ok) throw new Error('Erreur réseau')
       return res.json()
     },

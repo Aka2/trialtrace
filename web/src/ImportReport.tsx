@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-const API_URL = 'https://75n6uz51h9.execute-api.eu-west-1.amazonaws.com'
+import { apiFetch } from './api'
 
 type ExtractResult =
   | { valid: true; data: Record<string, unknown> }
@@ -17,7 +16,7 @@ export function ImportReport() {
     setLoading(true)
     setResult(null)
     try {
-      const res = await fetch(`${API_URL}/extract`, {
+      const res = await apiFetch('/extract', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text }),

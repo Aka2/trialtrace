@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from './auth/AuthContext'
-
-const API_URL = 'https://75n6uz51h9.execute-api.eu-west-1.amazonaws.com'
+import { apiFetch } from './api'
 
 type Protocol = { hemoglobinMin: number; hemoglobinMax: number; doseExpected: number; visitWindow: number }
 
@@ -17,7 +16,7 @@ export function ProtocolPanel() {
   const queryClient = useQueryClient()
 
   useEffect(() => {
-    fetch(`${API_URL}/protocol`).then((r) => r.json()).then(setProtocol).catch(() => setMessage(t('deviations.loadError')))
+    apiFetch('/protocol').then((r) => r.json()).then(setProtocol).catch(() => setMessage(t('deviations.loadError')))
   }, [t])
 
   const handleChange = (field: keyof Protocol, value: string) => {
@@ -30,7 +29,7 @@ export function ProtocolPanel() {
     setSaving(true)
     setMessage('')
     try {
-      const res = await fetch(`${API_URL}/protocol`, {
+      const res = await apiFetch('/protocol', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(protocol),

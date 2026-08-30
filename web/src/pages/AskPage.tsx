@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-const API_URL = 'https://75n6uz51h9.execute-api.eu-west-1.amazonaws.com'
+import { apiFetch } from '../api'
 
 type Exchange = { question: string; answer: string; tool?: string | null }
 
@@ -21,7 +20,7 @@ export function AskPage() {
     if (!q.trim()) return
     setLoading(true)
     try {
-      const res = await fetch(`${API_URL}/ask`, {
+      const res = await apiFetch('/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: q }),

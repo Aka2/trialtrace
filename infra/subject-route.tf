@@ -11,6 +11,8 @@ resource "aws_apigatewayv2_route" "get_subject" {
   api_id    = aws_apigatewayv2_api.http_api.id
   route_key = "GET /subjects/{id}"
   target    = "integrations/${aws_apigatewayv2_integration.get_subject.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
 }
 
 # --- Autoriser l'API à invoquer la Lambda ---

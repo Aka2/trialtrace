@@ -9,9 +9,18 @@ import { SearchPage } from './pages/SearchPage'
 import { ProtocolPage } from './pages/ProtocolPage'
 import { AskPage } from './pages/AskPage'
 import './App.css'
+import { useIdleTimeout } from './auth/useIdleTimeout'
 
 function AppShell() {
-  const { isAuthenticated, loading } = useAuth()
+  const { isAuthenticated, loading, logout } = useAuth()
+
+  // Déconnexion auto après 15 min d'inactivité
+  useIdleTimeout(() => {
+    if (isAuthenticated) {
+      logout()
+      alert('Session expirée après inactivité. Veuillez vous reconnecter.')
+    }
+  }, 10)
 
   if (loading) return <div className="login-screen"><p style={{ color: '#fff' }}>Chargement…</p></div>
   if (!isAuthenticated) return <LoginPage />

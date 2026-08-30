@@ -60,6 +60,8 @@ resource "aws_apigatewayv2_route" "get_stats" {
   api_id    = aws_apigatewayv2_api.http_api.id
   route_key = "GET /stats"
   target    = "integrations/${aws_apigatewayv2_integration.get_stats.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
 }
 
 resource "aws_lambda_permission" "api_get_stats" {

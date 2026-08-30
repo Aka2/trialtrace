@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { DeviationsTable } from '../DeviationsTable'
-
-const API_URL = 'https://75n6uz51h9.execute-api.eu-west-1.amazonaws.com'
+import { apiFetch } from '../api'
 
 type Stats = { total: number; conformes: number; mineures: number; critiques: number; ecarts: number }
 
@@ -11,7 +10,7 @@ export function Dashboard() {
   const { data } = useQuery<Stats>({
     queryKey: ['stats'],
     queryFn: async () => {
-      const res = await fetch(`${API_URL}/stats`)
+      const res = await apiFetch('/stats')
       if (!res.ok) throw new Error('Erreur')
       return res.json()
     },

@@ -64,6 +64,8 @@ resource "aws_apigatewayv2_route" "ask" {
   api_id    = aws_apigatewayv2_api.http_api.id
   route_key = "POST /ask"
   target    = "integrations/${aws_apigatewayv2_integration.ask.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
 }
 
 resource "aws_lambda_permission" "api_ask" {

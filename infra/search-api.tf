@@ -61,6 +61,8 @@ resource "aws_apigatewayv2_route" "search" {
   api_id    = aws_apigatewayv2_api.http_api.id
   route_key = "GET /search"
   target    = "integrations/${aws_apigatewayv2_integration.search.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
 }
 
 resource "aws_lambda_permission" "api_search" {

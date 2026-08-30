@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-const API_URL = 'https://75n6uz51h9.execute-api.eu-west-1.amazonaws.com'
+import { apiFetch } from './api'
 
 type Participant = {
   subjectId: string
@@ -21,7 +20,7 @@ export function SearchBar() {
     setLoading(true)
     setSearched(true)
     try {
-      const res = await fetch(`${API_URL}/search?q=${encodeURIComponent(q)}`)
+      const res = await apiFetch(`/search?q=${encodeURIComponent(q)}`)
       const json = await res.json()
       setResults(json.results ?? [])
     } catch {
